@@ -32,8 +32,11 @@ carController.getCars = async (req, res, next) => {
       query = { isDeleted: false };
     }
 
+    let totalCars = await Car.find({ isDeleted: false }).count();
+
     let cars = await Car.find(query)
       .sort({ createdAt: "desc", updatedAt: "desc" })
+      .limit(page * 10)
       .select({
         isDeleted: 0,
         createdAt: 0,
@@ -41,9 +44,9 @@ carController.getCars = async (req, res, next) => {
         __v: 0,
       });
 
-    const total = Math.ceil(cars.length / 10);
+    const total = Math.ceil(parseInt(totalCars) / 10);
 
-    cars = cars.slice((page - 1) * 10, (page + 1) * 10);
+    cars = cars.slice((page - 1) * 10, page * 10);
 
     res.send({ cars, total });
   } catch (err) {
