@@ -5,6 +5,7 @@ const logger = require("morgan");
 const cors = require("cors");
 const indexRouter = require("./routes/index");
 const mongoose = require("mongoose");
+const Car = require("./models/Car");
 
 // const Car = require("./models/Car");
 
@@ -44,7 +45,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 // Connect to MONGODB
-mongoose.connect(process.env.MONGO_URI, () => {
+mongoose.connect(process.env.MONGO_URI, async () => {
   console.log("Connected to Database!");
 });
 
